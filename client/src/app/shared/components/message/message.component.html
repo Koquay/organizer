@@ -1,0 +1,11 @@
+<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center alert-main my-4"
+  *ngIf="errorMessage || infoMessage">
+  <div class="alert  alert-div" role="alert" [ngClass]="{'alert-danger' : errorMessage, 'alert-info' : infoMessage}">
+    <div class="d-flex justify-content-center align-items-center">
+      <strong class="mr-auto">{{message}}</strong>
+      <span class="badge badge-pill timer ms-2">
+        {{progressIndex}}
+      </span>
+    </div>
+  </div>
+</div>

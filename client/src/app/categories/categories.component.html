@@ -1,0 +1,369 @@
+<div class="container">
+    <div class="row my-2">
+      <div class="col-12">
+        <ul class="d-block d-md-flex list-unstyled">
+          <li class="nav-item">
+            <button class="btn" type="button" data-bs-toggle="modal" 
+              data-bs-target="#addCategoryModal">
+                <i class="fa fa-plus-square blue me-1"></i>Add category<br>
+              </button>
+          </li>
+          <li class="nav-item">
+            <button class="btn" type="button" data-bs-toggle="modal" 
+              data-bs-target="#deleteCategoryModal" (click)="setDeleteCategoryName()">
+              <i class="fa fa-minus-square red me-1"></i>Delete category
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item" role="presentation" *ngFor="let category of categories">
+              <a class="nav-link" role="tab" data-bs-toggle="tab" href="{{category.link}}"
+              [ngClass]="{'active' : category.link === categoryLink}"
+                (click)="setActiveCategory(category)">{{category.name}}</a>
+            </li>
+          </ul>
+          <div class="tab-content"> 
+            <div class="tab-pane" role="tabpanel" id="{{category.link}}"
+              *ngFor="let category of categories" 
+              [ngClass]="{'active' : category.link === categoryLink}">
+              
+              <div class="row mb-2">
+                <div class="col-12 d-flex align-iteAms-center col-md-3 mx-2 mb-2">
+                    <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#addSiteModal"
+                    (click)="setActiveCategory(category)">
+                    <i class="fa fa-plus-square blue me-1"></i>Add new site<br>
+                  </button>
+                </div>
+                <div class="col-12 col-md-3 mx-2 mb-2">
+                  <div class="dropdown" id="sort-site">
+                    <button class="btn" aria-expanded="false" data-bs-toggle="dropdown" type="button">
+                      <i class="fa fa-sort me-1 blue"></i>Sort sites by:</button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#">Titles</a>
+                      <a class="dropdown-item" href="#">Date added</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div
+                  class="col-12 d-flex justify-content-center align-items-center col-xs-12 col-sm-6 col-md-4 col-lg-3 mb-4"
+                  *ngFor="let site of category.sites">
+                  <div class="card d-flex">
+                    <div class="card-body text-center">
+                      <a class="card-link" href="#">
+                        <h6 class="text-muted d-flex justify-content-center mb-2" style="font-size: 20px;">
+                          {{site?.site?.url}}
+                        </h6>
+                        <img class="img-fluid news-logo" src="{{site?.site?.img}}"
+                          crossorigin="Anonymous">
+                      </a>
+                      <div class="text-start">
+                        <div class="row mt-1">
+                          <div class="col-12 d-flex align-items-center">
+                              <button class="btn" type="button" data-bs-toggle="modal" 
+                                data-bs-target="#addBookmarkModal" 
+                                (click)="setActiveSite(site)">
+                                <i class="fa fa-plus-square blue me-1"></i>Add bookmark<br>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="row mt-1">
+                          <div class="col-12 d-flex align-items-center">
+                            <button class="btn" type="button" data-bs-toggle="modal" 
+                                data-bs-target="#viewBookmarksModal" (click)="setActiveSite(site)">
+                              <i class="fa fa-bookmark green me-1"></i>View bookmarks<br>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="row mt-1">
+                          <div class="col-12 d-flex align-items-center">
+                            <button class="btn" type="button" data-bs-toggle="modal" 
+                              data-bs-target="#deleteConfirmationModal" (click)="setActiveSite(site)">
+                              <i class="fa fa-minus-square red me-1"></i>Delete this&nbsp;site<br>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+
+            </div>
+          </div> 
+        </div>
+      </div>
+    </div>
+
+    <!-- add category modal -->
+  <div class="col">
+    <div class="modal fade" role="dialog" tabindex="-1" id="addCategoryModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Add New Category</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <form  #addCatetoryForm="ngForm">
+              <div class="row mb-4">
+                <div class="col-12 col-md-3">
+                  <label class="col-form-label">Category Name:</label>
+                </div>
+                <div class="col col-xs-12 col-sm-6">                
+                  <input class="form-control" type="url" [(ngModel)]="categoryName" 
+                     #categoryNameVar="ngModel" name="categoryName" required>
+
+                  <div *ngIf="categoryNameVar.invalid && (categoryNameVar.dirty || categoryNameVar.touched)">
+                    <div *ngIf="categoryNameVar.errors['required']" class="red">
+                      Category name is required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-primary" type="button" (click)="addCategory()"
+              [disabled]="!addCatetoryForm.form.valid">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ 
+  <!-- add site modal -->
+  <div class="col">
+    <div class="modal fade" role="dialog" tabindex="-1" id="addSiteModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Add New Site</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <form  #addNewSiteForm="ngForm">
+              <div class="row mb-4">
+                <div class="col-12 col-md-3">
+                  <label class="col-form-label">Site url:</label>
+                </div>
+                <div class="col col-xs-12 col-sm-6">                
+                  <input class="form-control" type="url" [(ngModel)]="siteUrl" 
+                    #siteUrlVar="ngModel" name="siteUrl" required>
+
+                  <div *ngIf="siteUrlVar.invalid && (siteUrlVar.dirty || siteUrlVar.touched)">
+                    <div *ngIf="siteUrlVar.errors['required']" class="red">
+                      Site url is required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-primary" type="button" (click)="addSite()"
+              [disabled]="!addNewSiteForm.form.valid">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- add bookmark modal -->
+  <div class="col">
+    <div class="modal fade" role="dialog" tabindex="-1" id="addBookmarkModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Add Bookmark</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <form  #addBookmarkForm="ngForm">
+              <div class="row mb-4">
+                <div class="col-12 text-center">
+                  <h4>{{site?.url}}</h4>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-12 col-md-3">
+                  <label class="col-form-label">Title:</label>
+                </div>
+                <div class="col col-xs-12 col-sm-6">                
+                  <input class="form-control" type="url" [(ngModel)]="bookmarkTitle" 
+                    #bookmarkTitleVar="ngModel" name="bookmarkTitle" required>
+
+                  <div *ngIf="bookmarkTitleVar.invalid && 
+                    (bookmarkTitleVar.dirty || bookmarkTitleVar.touched)">
+                    <div *ngIf="bookmarkTitleVar.errors['required']" class="red">
+                      Bookmark title is required
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-12 col-md-3">
+                  <label class="col-form-label">Bookmark Link:</label>
+                </div>
+                <div class="col col-xs-12 col-sm-6">                
+                  <input class="form-control" type="url" [(ngModel)]="bookmarkLink" 
+                    #bookmarkLinkVar="ngModel" name="bookmarkLink" required>
+
+                  <div *ngIf="bookmarkLinkVar.invalid && (bookmarkLinkVar.dirty || bookmarkLinkVar.touched)">
+                    <div *ngIf="bookmarkLinkVar.errors['required']" class="red">
+                      Bookmark is required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-primary" type="button" (click)="addBookmark()"
+              [disabled]="!addBookmarkForm.form.valid">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- view bookmarks modal -->
+  <div class="col">
+    <div class="modal fade" role="dialog" tabindex="-1" id="viewBookmarksModal">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">View Bookmarks</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-4">
+              <div class="col-12 text-center">
+                <h6 class="text-muted d-flex justify-content-center mb-2" style="font-size: 20px;">
+                  {{site?.url}}
+                </h6>
+                <img class="img-fluid news-logo" src="{{site?.site?.img}}"
+                  crossorigin="Anonymous">
+              </div>
+            </div>
+            <div class="row mb-2 d-none d-lg-flex">
+              <div class="col-lg-3">
+                <span><b>Title</b></span>
+              </div>
+              <div class="col-lg-5">
+                <span><b>Link</b></span>
+              </div>
+              <div class="col-lg-2">
+                <span><b>Date Created</b></span>
+              </div>
+              <div class="col-lg-2">
+                <span><b>Delete</b></span>
+              </div>
+            </div>
+              <div class="row mb-2" *ngFor="let bookmark of site?.bookmarks">                
+                <div class="col-12 col-lg-3">
+                  <a>
+                    <span>{{bookmark.title}}</span>
+                  </a>
+                </div>
+                <div class="col-12 col-lg-5 blue">
+                  <a>
+                    <span>{{bookmark.link}}</span>                    
+                  </a>
+                </div>
+                <div class="col-10 col-lg-2">
+                  <a>
+                    <span>12/25/22</span>
+                  </a>
+                </div>
+                <div class="col-2 col-lg-2">
+                  <a>
+                    <button class="btn" type="button" 
+                      (click)="deleteBookmark(site?._id, bookmark?._id)">
+                      <i class="fa fa-remove red" ></i>
+                    </button>
+                  </a>
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- delete category modal -->
+  <div class="col">
+    <div class="modal fade" role="dialog" tabindex="-1" id="deleteCategoryModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Category</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <form  #deleteCatetoryForm="ngForm">
+              <div class="row mb-4" *ngIf="deleteCategoryName">
+                <div class="col-12">
+                  <h6 class="red">
+                    Do you want to delete category <b>{{deleteCategoryName}}?</b>
+                  </h6>
+                </div>
+              </div>
+
+              <div class="row mb-4">
+                <div class="col-12">
+                  <div class="input-group">
+                    <select [ngModel]="deleteCategoryObj" (ngModelChange)="onChange($event)" 
+                      class="form-control" name="deleteCategory">
+                      <option [value]="null" disabled selected>
+                        Choose category to delete...
+                      </option>
+                      <option *ngFor="let category of categories" [ngValue]="category">
+                        {{category.name}}
+                      </option>
+                    </select>
+                  </div> 
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-light" type="button" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary bg-red" type="button" (click)="deleteCategory()">
+              Delete {{deleteCategoryName}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

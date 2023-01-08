@@ -1,0 +1,30 @@
+
+<div class="container">
+  <nav class="navbar navbar-light navbar-expand-lg navigation-clean-button" style="font-family: 'Roboto';">
+    <div class="container">
+      <a class="navbar-brand" href="#" style="font-size: 24px;">
+        <i class="fa fa-globe me-1"></i><strong>InternetOrganizer</strong><br>
+    </a>
+      <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-2">
+        <span class="visually-hidden">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navcol-2" *ngIf="!loggedIn">
+        <ul class="navbar-nav me-auto">
+        </ul>
+        <span class="navbar-text actions">
+          <a class="login" [routerLink]="['/login', '1']">Log In</a>
+          <a class="btn btn-light action-button" role="button" 
+            [routerLink]="['/sign-up']" >Sign Up</a>
+        </span>
+      </div>
+      <div class="collapse navbar-collapse" id="navcol-2" *ngIf="loggedIn">
+        <ul class="navbar-nav me-auto">
+        </ul>
+        <span class="navbar-text actions">
+          <a class="login" (click)="logout()">Log Out</a>
+        </span>
+      </div>
+    </div>   
+  </nav>
+</div>
